@@ -91,13 +91,19 @@ const rootQuery = new GraphQLObjectType({
   })
 });
 
+const schema = new GraphQLSchema({
+  query: rootQuery
+});
+// use graphiql interface
 app.use(
   "/graphql",
   expressGraphql({
+    schema,
     graphiql: true
   })
 );
 
+// serving the app
 app.listen(5000, () => {
   console.log("server running at port 5000");
 });
