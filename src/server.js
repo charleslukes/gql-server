@@ -56,6 +56,41 @@ const BookType = new GraphQLObjectType({
   })
 });
 
+// schema for the root query
+const rootQuery = new GraphQLObjectType({
+  name: "Query",
+  description: "This is the root query",
+  fields: () => ({
+    book: {
+      type: BookType,
+      description: "A single book",
+      args: {
+        id: {
+          type: GraphQLNonNull(GraphQLInt)
+        }
+      },
+      resolve: (parent, args) => {
+        return books.find(elem => elem.id === args.id);
+      }
+    },
+
+    books: {
+      type: new GraphQLList(BookType),
+      description: "A list of all available books",
+      resolve: () => {
+        return books;
+      }
+    },
+    authors: {
+      type: new GraphQLList(AuthorType),
+      description: "A list of all authors",
+      resolve: () => {
+        return authors;
+      }
+    }
+  })
+});
+
 app.use(
   "/graphql",
   expressGraphql({
