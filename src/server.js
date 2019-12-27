@@ -32,6 +32,30 @@ const AuthorType = new GraphQLObjectType({
     }
   })
 });
+
+// schema for the book type
+const BookType = new GraphQLObjectType({
+  name: "Book",
+  description: "The book properties",
+  fields: () => ({
+    id: {
+      type: GraphQLNonNull(GraphQLInt)
+    },
+    name: {
+      type: GraphQLNonNull(GraphQLString)
+    },
+    authorId: {
+      type: GraphQLNonNull(GraphQLInt)
+    },
+    author: {
+      type: AuthorType,
+      resolve: parent => {
+        return authors.find(elem => elem.id === parent.authorId);
+      }
+    }
+  })
+});
+
 app.use(
   "/graphql",
   expressGraphql({
